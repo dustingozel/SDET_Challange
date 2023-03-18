@@ -21,7 +21,6 @@ test.beforeEach(async ({ browser }) => {
   await expect(page).toHaveTitle(title);
 });
 
-
 test('Launch to Products Page', async () => {
   const products = new ProductsPage(page);
   await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
@@ -29,7 +28,6 @@ test('Launch to Products Page', async () => {
   const headerText = await products.productsHeader.textContent();
   expect(await headerText).toEqual('Products');
 });
-
 
 const {
   optionNames,
@@ -139,8 +137,6 @@ test('Sort By Dropdown Function Verification', async () => {
 
   await products.sortByDropdown.click();
 
-  const optionCount = await products.sortByDropdownOptions.count();
-
   await Promise.all([
     page.waitForLoadState('load'),
     products.sortByDropdown.selectOption('lohi')
@@ -172,4 +168,63 @@ test('Sort By Dropdown Function Verification', async () => {
   expect(await shoppingCart.backHomeButtoon).toBeVisible();
 
   await shoppingCart.backHomeButtoon.click();
+});
+
+test('Complete Checkout without Adding Item', async () => {
+  const products = new ProductsPage(page);
+  const shoppingCart = new CartPage(page);
+
+  await expect(products.shoppingCartBadge).not.toBeVisible();
+  await products.shoppingCart.click();
+  await expect(shoppingCart.cartItems).not.toBeVisible();
+
+  await shoppingCart.checkoutButton.click();
+
+  const informationCounts = await shoppingCart.checkoutInformations.count();
+
+  for(let k = 0; k < informationCounts; k++) {
+    if(await shoppingCart.checkoutInformations.nth(k).getAttribute("id") === 'first-name') {
+      await shoppingCart.checkoutInformations.nth(k).type('Dustin');
+    } else if ( await shoppingCart.checkoutInformations.nth(k).getAttribute("id") === 'last-name' ) {
+      await shoppingCart.checkoutInformations.nth(k).type('Gozel');
+    } else {
+      await shoppingCart.checkoutInformations.nth(k).type('22003');
+    }
+  }
+
+  await shoppingCart.continueSubmitButton.click();
+
+  await shoppingCart.finishButton.click();
+
+  expect(await shoppingCart.checkoutCompleteTitle.textContent()).toEqual('Checkout: Complete!');
+});
+
+test('Shopping Cart Remove and Cancel Validation', async () => {
+  const products = new ProductsPage(page);
+  const shoppingCart = new CartPage(page);
+
+  await expect(products.shoppingCartBadge).not.toBeVisible();
+
+  await products.sauceLabsBikeLightAddtoCart.click();
+  await expect(products.shoppingCartBadge).toBeVisible();
+
+  await products.shoppingCart.click();
+  expect(await shoppingCart.sauceLabsBikeLightRemove).toBeVisible();
+
+  await shoppingCart.sauceLabsBikeLightRemove.click();
+  expect(await shoppingCart.sauceLabsBikeLightRemove).not.toBeVisible();
+  expect(await shoppingCart.cartItems).not.toBeVisible();
+
+  await shoppingCart.continueShoppingButton.click();
+  await products.sauceLabsBikeLightAddtoCart.click();
+  await products.shoppingCart.click();
+  await shoppingCart.checkoutButton.click();
+  await shoppingCart.cancelButton.click();
+
+  expect(await shoppingCart.yourCartTitle.textContent()).toEqual('Your Cart');
+
+  await shoppingCart.sauceLabsBikeLightRemove.click();
+  await shoppingCart.continueShoppingButton.click();
+
+  expect(await products.productsHeader.textContent()).toEqual('Products');
 });
