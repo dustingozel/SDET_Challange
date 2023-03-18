@@ -62,3 +62,21 @@ test('Login Validation by Sending Empty Username and Password', async () => {
     expect(await login.errorMessage.textContent()).toEqual('Epic sadface: Username is required');
 });
 
+test('Login Validation by Sending Wrong Username - Password', async () => {
+    const login = new LoginPage(page);
+  
+    await login.username.type(await username.lockedOutUser+'x');
+    await login.lastname.type('secret_sauce');
+  
+    await login.logInButton.click();
+  
+    const error = 'Epic sadface: Username and password do not match any user in this service';
+    expect(await login.errorMessage.textContent()).toEqual(error);
+
+    await login.username.type(await username.lockedOutUser+'x');
+    await login.lastname.type('secret_sauceX');
+  
+    await login.logInButton.click();
+    expect(await login.errorMessage.textContent()).toEqual(error);
+});
+

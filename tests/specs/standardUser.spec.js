@@ -13,7 +13,7 @@ test.beforeEach(async ({ browser }) => {
 
   await page.addInitScript(value => {
     document.cookie = `session-username=${value}`; 
-  },username.standardUser)
+  },username.standardUser);
 
   await page.goto('https://www.saucedemo.com/inventory.html');
 
