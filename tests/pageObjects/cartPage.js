@@ -14,6 +14,7 @@ class CartPage {
         this.subTotal = page.locator('//div[@class="summary_subtotal_label"]');
         this.successImage = page.locator('//img[@alt="Pony Express"]');
         this.successMessage = page.locator('//h2[@class="complete-header"]');
+        this.successText = page.locator('//div[@class="complete-text"]');
         this.title = page.locator('span.title');
         this.quantityTab = page.locator('//div[@class="cart_quantity_label"]');
     }

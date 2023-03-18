@@ -149,11 +149,27 @@ test('Sort By Dropdown Function Verification', async () => {
   const lowToHighPrices = await products.getAllItemPrices();
 
   for(let k = 0; k < lowToHighPrices.length-1; k++) {
-    console.log(await lowToHighPrices[k]);
     expect(Number(lowToHighPrices[k])).toBeLessThanOrEqual(Number(lowToHighPrices[k+1]));
   }
 
+  await products.sauceLabsOnesieAddtoCart.click();
+  await products.sauceLabsBikeLightAddtoCart.click();
 
+  await products.shoppingCart.click();
+  await shoppingCart.checkoutButton.click();
 
+  await products.checkoutFirstName.type('Dustin');
+  await products.checkoutLastName.type('Gozel');
+  await products.checkoutZipCode.type('22003');
 
+  await shoppingCart.continueSubmitButton.click();
+
+  expect(await products.checkoutTitle).toBeVisible('Checkout: Overview');
+
+  await shoppingCart.finishButton.click();
+
+  expect(await shoppingCart.successText.textContent()).toContain('Your order has been dispatched');
+  expect(await shoppingCart.backHomeButtoon).toBeVisible();
+
+  await shoppingCart.backHomeButtoon.click();
 });
