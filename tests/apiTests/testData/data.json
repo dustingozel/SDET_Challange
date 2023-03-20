@@ -1,0 +1,6 @@
+[
+    {
+        "baseUrl": "https://petstore.swagger.io",
+        "apiKey": "special-key"
+    }
+]
