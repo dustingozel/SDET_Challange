@@ -13,7 +13,7 @@ class ProductsPage {
         this.items = page.locator('//div[@class="inventory_item_name"]');
         this.logOutButton = page.locator('//a[@id="logout_sidebar_link"]');
         this.priceOfItem = page.locator('//div[@class="inventory_details_price"]');
-        this.productsHeader = page.locator('//span[normalize-space()="Products"]');
+        this.productsHeader = page.locator('//span[.="Products"]');
         this.sauceLabsBackpackAddToCart = page.locator('//button[@name="add-to-cart-sauce-labs-backpack"]');
         this.sauceLabsBackpackRemove = page.locator('//button[@id="remove-sauce-labs-backpack"]');
         this.sauceLabsBikeLightAddtoCart = page.locator('//button[@id="add-to-cart-sauce-labs-bike-light"]');
