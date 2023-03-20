@@ -7,6 +7,7 @@ const username = JSON.parse(JSON.stringify(require('../testData/userNames.json')
 
 let page;
 
+// Here I am using cookies to skip the login. 
 test.beforeEach(async ({ browser }) => {
   const context = await browser.newContext();
   page = await context.newPage();
@@ -21,6 +22,7 @@ test.beforeEach(async ({ browser }) => {
   await expect(page).toHaveTitle(title);
 });
 
+// Placing Products page
 test('Launch to Products Page', async () => {
   const products = new ProductsPage(page);
   await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
@@ -29,6 +31,8 @@ test('Launch to Products Page', async () => {
   expect(await headerText).toEqual('Products');
 });
 
+
+// Reading datas from json file on testData folder asserting them and logout from app. 
 const {
   optionNames,
 } = require('../testData/burgerMenuOptions');
@@ -55,6 +59,7 @@ test('Logout and Burger Menu Verification', async () => {
   await expect(login.logInButton).toBeVisible();
 });
 
+// Whole flow positive purchase scenario.
 test('Purchase Verification', async () => {
   test.slow();
   const products = new ProductsPage(page);
@@ -125,12 +130,13 @@ test('Purchase Verification', async () => {
       expect(await shoppingCart.successMessage.textContent()).toEqual('Thank you for your order!');
       expect(await shoppingCart.successImage).toBeVisible();
 
-      await shoppingCart.backHomeButtoon.click();
+      await shoppingCart.backHomeButton.click();
       expect(products.productsHeader).toBeVisible();
     }
   }
 });
 
+// By changing sorting dropdown option and validate if it is working correctly.
 test('Sort By Dropdown Function Verification', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
@@ -165,11 +171,12 @@ test('Sort By Dropdown Function Verification', async () => {
   await shoppingCart.finishButton.click();
 
   expect(await shoppingCart.successText.textContent()).toContain('Your order has been dispatched');
-  expect(await shoppingCart.backHomeButtoon).toBeVisible();
+  expect(await shoppingCart.backHomeButton).toBeVisible();
 
-  await shoppingCart.backHomeButtoon.click();
+  await shoppingCart.backHomeButton.click();
 });
 
+// Scenario of placing order without adding item.
 test('Complete Checkout without Adding Item', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
@@ -199,6 +206,7 @@ test('Complete Checkout without Adding Item', async () => {
   expect(await shoppingCart.checkoutCompleteTitle.textContent()).toEqual('Checkout: Complete!');
 });
 
+// Scenario of removing item via Shopping cart and cancel the proccess from checkout page.
 test('Shopping Cart Remove and Cancel Validation', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);

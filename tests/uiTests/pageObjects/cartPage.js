@@ -2,7 +2,7 @@ class CartPage {
 
     constructor(page) {
         this.page = page;
-        this.backHomeButtoon = page.locator('//button[@id="back-to-products"]');
+        this.backHomeButton = page.locator('//button[@id="back-to-products"]');
         this.cancelButton = page.locator('//button[@id="cancel"]');
         this.cartQuantity = page.locator('//div[@class="cart_quantity"]');
         this.cartItems = page.locator('//div[@class="cart_item_label"]');
@@ -11,6 +11,8 @@ class CartPage {
         this.checkoutInformations = page.locator('//div[@class="form_group"]//input');
         this.continueSubmitButton = page.locator('//input[@id="continue"]');
         this.continueShoppingButton = page.locator('//button[@id="continue-shopping"]');
+        this.errorButton = page.locator('//button[@class="error-button"]');
+        this.errorMessage = page.locator('//h3[@data-test="error"]');
         this.finishButton = page.locator('//button[@id="finish"]');
         this.priceOfItem = page.locator('//div[@class="inventory_item_price"]');
         this.sauceLabsBackpackRemove = page.locator('//button[@id="remove-sauce-labs-backpack"]');

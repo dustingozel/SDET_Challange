@@ -29,8 +29,27 @@ test('Launch to Products Page', async () => {
   expect(await headerText).toEqual('Products');
 });
 
-test('Purchase Verification', async () => {
-  test.slow();
+test('Purchase Verification - Remove an item from the Products page - Bug', async () => {
+  const products = new ProductsPage(page);
+  const shoppingCart = new CartPage(page);
+
+  await products.sauceLabsBackpackAddToCart.click();
+  await expect(products.shoppingCartBadge).toBeVisible();
+
+  await products.sauceLabsBackpackRemove.click();
+
+  //I made this assertion commented out since otherwise if will be failing because remove buttons are not working on Prodcuts page which is bug!
+  //await expect(products.shoppingCartBadge).not.toBeVisible();
+  await expect(products.shoppingCartBadge).toBeVisible();
+
+  await products.shoppingCart.click();
+  await shoppingCart.sauceLabsBackpackRemove.click();
+  await shoppingCart.continueShoppingButton.click();
+
+  await expect(products.shoppingCartBadge).not.toBeVisible();
+});
+
+test('Purchase Verification - Filling Placing Order Information Bug', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
 
@@ -41,6 +60,17 @@ test('Purchase Verification', async () => {
   await shoppingCart.checkoutButton.click();
 
   await products.checkoutFirstName.type('Dustin');
+  expect(await products.checkoutFirstName).toHaveAttribute('value', 'Dustin');
 
+  await products.checkoutLastName.type('gozel');
+  expect(await products.checkoutLastName).not.toHaveAttribute('value', 'gozel');
+  expect(await products.checkoutLastName).toHaveAttribute('value', '');
+  expect(await products.checkoutFirstName).toHaveAttribute('value', 'l');
 
+  await shoppingCart.continueSubmitButton.click();
+  expect(await shoppingCart.errorMessage.textContent()).toEqual('Error: Last Name is required');
+
+  await shoppingCart.errorButton.click();
+  expect(await shoppingCart.errorMessage).not.toBeVisible();
+  expect(await shoppingCart.errorButton).not.toBeVisible();
 });

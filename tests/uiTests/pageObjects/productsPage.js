@@ -3,6 +3,7 @@ class ProductsPage {
     constructor(page) {
         this.page = page;
         this.allItemPrices = page.locator('//div[@class="inventory_item_price"]'); // returns all item's prices
+        this.backToProductsButton = page.locator('//button[@id="back-to-products"]');
         this.burgerMenuButton = page.locator('//button[@id="react-burger-menu-btn"]');
         this.burgerMenuOptions = page.locator('//nav[@class="bm-item-list"]//a');
         this.checkoutFirstName = page.locator('//input[@id="first-name"]');
@@ -14,7 +15,7 @@ class ProductsPage {
         this.priceOfItem = page.locator('//div[@class="inventory_details_price"]');
         this.productsHeader = page.locator('//span[normalize-space()="Products"]');
         this.sauceLabsBackpackAddToCart = page.locator('//button[@name="add-to-cart-sauce-labs-backpack"]');
-        this.sauceLabsBackpackRemove = page.locator('//button[id="remove-sauce-labs-backpack"]');
+        this.sauceLabsBackpackRemove = page.locator('//button[@id="remove-sauce-labs-backpack"]');
         this.sauceLabsBikeLightAddtoCart = page.locator('//button[@id="add-to-cart-sauce-labs-bike-light"]');
         this.sauceLabsOnesieAddtoCart = page.locator('//button[@id="add-to-cart-sauce-labs-onesie"]');
         this.sortByDropdown = page.locator('//select[@class="product_sort_container"]');
