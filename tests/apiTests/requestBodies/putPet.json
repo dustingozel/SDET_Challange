@@ -1,0 +1,38 @@
+[
+    {
+        "id": 666666666,
+        "category": {
+          "id": 0,
+          "name": "initialDogCreatedByDustinHasUpdated"
+        },
+        "name": "doggie",
+        "photoUrls": [
+          "string"
+        ],
+        "tags": [
+            {
+            "id": 0,
+            "name": "initialID"
+            }
+        ],
+        "status": "available"
+    },
+    {
+        "id": 666666666,
+        "category": {
+          "id": 0,
+          "name": "initialDogCreatedByDustinHasUpdated"
+        },
+        "name": "doggie",
+        "photoUrls": [
+          "string"
+        ],
+        "tags": [
+            {
+            "id": 0,
+            "name": "initialID"
+            }
+        ],
+        "status": "pending"
+    }
+]
