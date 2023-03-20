@@ -4,6 +4,7 @@ const { ProductsPage } = require('../pageObjects/productsPage');
 const { CartPage } = require('../pageObjects/cartPage');
 
 const username = JSON.parse(JSON.stringify(require('../testData/userNames.json')));
+const url = JSON.parse(JSON.stringify(require('../testData/url.json')));
 
 let page;
 
@@ -16,14 +17,14 @@ test.beforeEach(async ({ browser }) => {
     document.cookie = `session-username=${value}`; 
   },username.standardUser);
 
-  await page.goto('https://www.saucedemo.com/inventory.html');
+  await page.goto(await url[0].baseUrl + 'inventory.html');
 
   const title = 'Swag Labs';
   await expect(page).toHaveTitle(title);
 });
 
 // Placing Products page
-test('Launch to Products Page', async () => {
+test('@UI Launch to Products Page', async () => {
   const products = new ProductsPage(page);
   await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
 
@@ -37,7 +38,7 @@ const {
   optionNames,
 } = require('../testData/burgerMenuOptions');
 
-test('Logout and Burger Menu Verification', async () => {
+test('@UI Logout and Burger Menu Verification', async () => {
   const products = new ProductsPage(page);
   const login = new LoginPage(page);
 
@@ -50,9 +51,8 @@ test('Logout and Burger Menu Verification', async () => {
   for(let i = 1; i < optionsLength; i++) {
 
     const options = optionNames.get("" + i);
-    
     expect(await products.burgerMenuOptions.nth(i-1).textContent()).toEqual(options);
-  }
+  };
 
   await products.logOutButton.click();
 
@@ -60,7 +60,7 @@ test('Logout and Burger Menu Verification', async () => {
 });
 
 // Whole flow positive purchase scenario.
-test('Purchase Verification', async () => {
+test('@UI Purchase Verification', async () => {
   test.slow();
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
@@ -101,7 +101,7 @@ test('Purchase Verification', async () => {
 
       for(let k = 1; k < itemsCount; k++) {
         expect(await products.items.nth(k)).toBeVisible();
-      }
+      };
 
       // Back to cart to continue checkout
       await products.shoppingCart.click();
@@ -110,15 +110,15 @@ test('Purchase Verification', async () => {
       // Fill the checkout blanks 
       const informationCounts = await shoppingCart.checkoutInformations.count();
 
-      for(let k = 0; k < informationCounts; k++) {
-        if(await shoppingCart.checkoutInformations.nth(k).getAttribute("id") === 'first-name') {
-          await shoppingCart.checkoutInformations.nth(k).type('Dustin');
-        } else if ( await shoppingCart.checkoutInformations.nth(k).getAttribute("id") === 'last-name' ) {
-          await shoppingCart.checkoutInformations.nth(k).type('Gozel');
+      for(let j = 0; j < informationCounts; j++) {
+        if(await shoppingCart.checkoutInformations.nth(j).getAttribute("id") === 'first-name') {
+          await shoppingCart.checkoutInformations.nth(j).type('Dustin');
+        } else if ( await shoppingCart.checkoutInformations.nth(j).getAttribute("id") === 'last-name' ) {
+          await shoppingCart.checkoutInformations.nth(j).type('Gozel');
         } else {
-          await shoppingCart.checkoutInformations.nth(k).type('22003');
+          await shoppingCart.checkoutInformations.nth(j).type('22003');
         }
-      }
+      };
 
       await shoppingCart.continueSubmitButton.click();
       const subTotal = await shoppingCart.subTotal.textContent();
@@ -137,7 +137,7 @@ test('Purchase Verification', async () => {
 });
 
 // By changing sorting dropdown option and validate if it is working correctly.
-test('Sort By Dropdown Function Verification', async () => {
+test('@UI Sort By Dropdown Function Verification', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
 
@@ -150,9 +150,9 @@ test('Sort By Dropdown Function Verification', async () => {
     
   const lowToHighPrices = await products.getAllItemPrices();
 
-  for(let k = 0; k < lowToHighPrices.length-1; k++) {
-    expect(Number(lowToHighPrices[k])).toBeLessThanOrEqual(Number(lowToHighPrices[k+1]));
-  }
+  for(let i = 0; i < lowToHighPrices.length-1; i++) {
+    expect(Number(lowToHighPrices[i])).toBeLessThanOrEqual(Number(lowToHighPrices[i+1]));
+  };
 
   await products.sauceLabsOnesieAddtoCart.click();
   await products.sauceLabsBikeLightAddtoCart.click();
@@ -177,7 +177,7 @@ test('Sort By Dropdown Function Verification', async () => {
 });
 
 // Scenario of placing order without adding item.
-test('Complete Checkout without Adding Item', async () => {
+test('@UI Complete Checkout without Adding Item', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
 
@@ -197,7 +197,7 @@ test('Complete Checkout without Adding Item', async () => {
     } else {
       await shoppingCart.checkoutInformations.nth(k).type('22003');
     }
-  }
+  };
 
   await shoppingCart.continueSubmitButton.click();
 
@@ -207,7 +207,7 @@ test('Complete Checkout without Adding Item', async () => {
 });
 
 // Scenario of removing item via Shopping cart and cancel the proccess from checkout page.
-test('Shopping Cart Remove and Cancel Validation', async () => {
+test('@UI Shopping Cart Remove and Cancel Validation', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
 

@@ -5,10 +5,10 @@ const postRequestBody = require('../requestBodies/postNewPet.json');
 const putRequestBody = require('../requestBodies/putPet.json');
 
 // Creating a pet name 'initialDogCreatedByDustinG
-test(`Create Pet`, async ({request}) => {
+test(`@API Create Pet`, async ({request}) => {
     const response = await request.post(data[0].baseUrl + '/v2/pet', {
         data: postRequestBody[0]
-    })
+    });
     const responseJson = await response.json();
     let petId = await responseJson.id;
 
@@ -19,10 +19,10 @@ test(`Create Pet`, async ({request}) => {
 });
 
 // Sending newly created petId to Get request to be sure if pet has created
-test(`Validate Pet has been added through API that returns specific Pet based on ID`, async({request}) => {
+test(`@API Validate Pet has been added through API that returns specific Pet based on ID`, async({request}) => {
     const response = await request.get(data[0].baseUrl + '/v2/pet/' + postRequestBody[0].id, { 
         headers: {
-            Accept: 'application/json'
+            'Accept': 'application/json'
         }
     });
     expect(response.status()).toBe(200);
@@ -34,7 +34,7 @@ test(`Validate Pet has been added through API that returns specific Pet based on
     expect(await responseJson.status).toEqual(postRequestBody[0].status);
 });
 
-test(`Validate Pet has been Added`, async({request}) => {
+test(`@API Validate Pet has been Added`, async({request}) => {
     const response = await request.get(data[0].baseUrl + '/v2/pet/findByStatus?status=' + postRequestBody[0].status, { 
     });
     expect(response.status()).toBe(200);
@@ -50,7 +50,7 @@ test(`Validate Pet has been Added`, async({request}) => {
     }
 });
 
-test(`Update newly created Pet's name`, async({request}) => {
+test(`@API Update newly created Pet's name`, async({request}) => {
     const response = await request.put(data[0].baseUrl + '/v2/pet', {
         data: putRequestBody[0]
     });
@@ -63,7 +63,7 @@ test(`Update newly created Pet's name`, async({request}) => {
     expect(await responseJson.category.name).toEqual(putRequestBody[0].category.name);
 });
 
-test(`Validate Pet's name has been Updated`, async({request}) => {
+test(`@API Validate Pet's name has been Updated`, async({request}) => {
     const response = await request.get(data[0].baseUrl + '/v2/pet/' + putRequestBody[0].id, { 
         headers: {
             Accept: 'application/json'
@@ -76,7 +76,7 @@ test(`Validate Pet's name has been Updated`, async({request}) => {
     expect(await responseJson.category.name).toEqual(putRequestBody[0].category.name);
 });
 
-test(`Update newly created Pet's status`, async({request}) => {
+test(`@API Update newly created Pet's status`, async({request}) => {
     const response = await request.put(data[0].baseUrl + '/v2/pet', {
         data: putRequestBody[1]
     });
@@ -89,10 +89,10 @@ test(`Update newly created Pet's status`, async({request}) => {
     expect(await responseJson.status).toEqual(putRequestBody[1].status);
 });
 
-test(`Validate Pet's status has been Updated`, async({request}) => {
+test(`@API Validate Pet's status has been Updated`, async({request}) => {
     const response = await request.get(data[0].baseUrl + '/v2/pet/' + postRequestBody[0].id, { 
         headers: {
-            Accept: 'application/json'
+            'Accept': 'application/json'
         }
     });
     const responseJson = await response.json();
@@ -102,10 +102,10 @@ test(`Validate Pet's status has been Updated`, async({request}) => {
     expect(await responseJson.status).toEqual(putRequestBody[1].status);
 });
 
-test(`Delete newly created Pet`, async({request}) => {
+test(`@API Delete newly created Pet`, async({request}) => {
     const response = await request.delete(data[0].baseUrl + '/v2/pet/' + postRequestBody[0].id, { 
         headers: {
-            api_key: data[0].apiKey
+            'api_key': data[0].apiKey
         }
     });
     const responseJson = await response.json();
@@ -115,10 +115,10 @@ test(`Delete newly created Pet`, async({request}) => {
     expect(await responseJson.type).toEqual("unknown");
 });
 
-test(`Validate Pet has been Deleted`, async({request}) => {
+test(`@API Validate Pet has been Deleted`, async({request}) => {
     const response = await request.get(data[0].baseUrl + '/v2/pet/' + postRequestBody[0].id, { 
         headers: {
-            Accept: 'application/json'
+            'Accept': 'application/json'
         }
     });
     const responseJson = await response.json();

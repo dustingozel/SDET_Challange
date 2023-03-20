@@ -1,9 +1,9 @@
 const { test, expect } = require('@playwright/test');
-const { LoginPage } = require('../pageObjects/loginPage');
 const { ProductsPage } = require('../pageObjects/productsPage');
 const { CartPage } = require('../pageObjects/cartPage');
 
 const username = JSON.parse(JSON.stringify(require('../testData/userNames.json')));
+const url = JSON.parse(JSON.stringify(require('../testData/url.json')));
 
 let page;
 
@@ -15,13 +15,13 @@ test.beforeEach(async ({ browser }) => {
     document.cookie = `session-username=${value}`; 
   },username.problemUser);
 
-  await page.goto('https://www.saucedemo.com/inventory.html');
+  await page.goto(await url[0].baseUrl + 'inventory.html');
 
   const title = 'Swag Labs';
   await expect(page).toHaveTitle(title);
 });
 
-test('Launch to Products Page', async () => {
+test('@UI Launch to Products Page', async () => {
   const products = new ProductsPage(page);
   await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
   
@@ -29,7 +29,7 @@ test('Launch to Products Page', async () => {
   expect(await headerText).toEqual('Products');
 });
 
-test('Purchase Verification - Remove an item from the Products page - Bug', async () => {
+test('@UI Purchase Verification - Remove an item from the Products page - Bug', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
 
@@ -38,7 +38,7 @@ test('Purchase Verification - Remove an item from the Products page - Bug', asyn
 
   await products.sauceLabsBackpackRemove.click();
 
-  //I made this assertion commented out since otherwise if will be failing because remove buttons are not working on Prodcuts page which is bug!
+  //I made this assertion commented out. Otherwise it will be failing because the "Remove" buttons are not working on Prodcuts page when you try to remove item from the cart!
   //await expect(products.shoppingCartBadge).not.toBeVisible();
   await expect(products.shoppingCartBadge).toBeVisible();
 
@@ -49,7 +49,8 @@ test('Purchase Verification - Remove an item from the Products page - Bug', asyn
   await expect(products.shoppingCartBadge).not.toBeVisible();
 });
 
-test('Purchase Verification - Filling Placing Order Information Bug', async () => {
+// Last name field is not typeable.
+test('@UI Purchase Verification - Filling Placing Order Information Bug', async () => {
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
 
@@ -63,7 +64,8 @@ test('Purchase Verification - Filling Placing Order Information Bug', async () =
   expect(await products.checkoutFirstName).toHaveAttribute('value', 'Dustin');
 
   await products.checkoutLastName.type('gozel');
-  expect(await products.checkoutLastName).not.toHaveAttribute('value', 'gozel');
+  // Here I used soft assertion to see the error but not fail the test
+  expect.soft(await products.checkoutLastName).toHaveAttribute('value', 'gozel');
   expect(await products.checkoutLastName).toHaveAttribute('value', '');
   expect(await products.checkoutFirstName).toHaveAttribute('value', 'l');
 

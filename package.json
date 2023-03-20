@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "chromeHeaded": "npx playwright test --headed --grep @UI --project=chrome",
+    "chromeHeadless": "npx playwright test --grep @UI --project=chrome",
+    "allUIHeaded": "npx playwright test --headed --grep @UI",
+    "allUIHeadless": "npx playwright test --grep @UI",
+    "api": "npx playwright test --grep @API"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

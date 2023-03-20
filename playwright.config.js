@@ -1,98 +1,58 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
-
-/**
- * @see https://playwright.dev/docs/test-configuration
- */
 module.exports = defineConfig({
   testDir: './tests',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
+
   expect: {
-    /**
-     * Maximum time expect() should wait for the condition to be met.
-     * For example in `await expect(locator).toHaveText();`
-     */
-    timeout: 5000
+    timeout: 5000,
   },
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 0,
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-  },
-
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'],
-      headless: true
-     },
+      name: 'chrome',
+      use: {
+        browserName: 'chromium',
+        headless: true,
+        screenshot: 'on',
+        trace: 'on', // 'retain-on-fail'//off
+        video: 'off', //  this will capture video if the test fails. Other options: 'on', 'retain-on-failure', 'on-first-retry'
+        // viewPort : {width: 1510, height: 1050}, //this sets up the browser size
+        // ...devices ['Galaxy S8 landscape'] //you can choose the mobile phone other than apple here to run your test in that phone's screen size
+      },
     },
-
     // {
     //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'],
-    //   headless: false 
-    //  },
-    // },
-
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'],
-    //   headless: false
-    //  },
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
+    //   use: {
+    //     browserName: 'firefox',
+    //     headless: true,
+    //     screenshot: 'on',
+    //     trace: 'on', // 'retain-on-fail'//off,on
+    //   },
     // },
     // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
+    //   name: 'safari',
+    //   use: {
+    //     browserName: 'webkit',
+    //     headless: true,
+    //     screenshot: 'on',
+    //     trace: 'on', // 'retain-on-fail'//off,on
+    //     // ...devices ['iPhone 13'] //you can choose the mobile phone other than apple here to run your test in that phone's screen size
+    //   },
     // },
-
-    /* Test against branded browsers. */
     // {
-    //   name: 'Microsoft Edge',
-    //   use: { channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { channel: 'chrome' },
-    // },
+    //   name: 'edge',
+    //   use: {
+    //     channel: 'msedge',
+    //     headless: true,
+    //     screenshot: 'on',
+    //     trace: 'on', // 'retain-on-fail'//off,on
+    //     // ...devices ['iPhone 13'] //you can choose the mobile phone other than apple here to run your test in that phone's screen size
+    //   },
+    // }
   ],
-
-  /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  // outputDir: 'test-results/',
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   port: 3000,
-  // },
 });
-

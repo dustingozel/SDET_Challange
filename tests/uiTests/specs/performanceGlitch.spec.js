@@ -4,6 +4,7 @@ const { ProductsPage } = require('../pageObjects/productsPage');
 const { CartPage } = require('../pageObjects/cartPage');
 
 const username = JSON.parse(JSON.stringify(require('../testData/userNames.json')));
+const url = JSON.parse(JSON.stringify(require('../testData/url.json')));
 
 let page;
 
@@ -11,14 +12,14 @@ test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext();
   page = await context.newPage();
   
-  await page.goto('https://www.saucedemo.com/');
+  await page.goto(await url[0].baseUrl);
 
   const title = 'Swag Labs';
   await expect(page).toHaveTitle(title);
 });
 
 //I used Promise blocks to avoid any possible performance source issues.
-test('Login, Back To Products and Back Home Button Validation', async () => {
+test('@UI Login, Back To Products and Back Home Button Validation', async () => {
   test.slow();
   const products = new ProductsPage(page);
   const shoppingCart = new CartPage(page);
@@ -38,13 +39,13 @@ test('Login, Back To Products and Back Home Button Validation', async () => {
     if(await products.items.nth(i).textContent() === "Sauce Labs Fleece Jacket") {
       await products.items.nth(i).click();
 
-// When I click to 'back to products' on any item's page I am facing with long wait, again I am gonna use Promise blocks to avoid any possible failures because of this issue             
+// When I click to 'back to products' button on any item's page I am facing with long wait, again I am gonna use Promise blocks to avoid any possible failures because of this issue             
       await Promise.all([
         page.waitForLoadState('load'),
         await products.backToProductsButton.click()
       ]);
-    }
-  }
+    };
+  };
 
   expect(await products.productsHeader).toBeVisible();
 
